@@ -15,11 +15,22 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 public class MyTextWebSocketHandler extends TextWebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(MyTextWebSocketHandler.class);
     
+    private TextMessage msg = null;
+    
     private final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
  
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
+        if(msg!=null) {
+	        sessions.forEach(webSocketSession -> {
+	            try {
+	                webSocketSession.sendMessage(msg);
+	            } catch (IOException e) {
+	                LOGGER.error("Error occurred.", e);
+	            }
+	        });
+        }
         super.afterConnectionEstablished(session);
     }
  
@@ -32,9 +43,10 @@ public class MyTextWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         super.handleTextMessage(session, message);
+        msg = message;
         sessions.forEach(webSocketSession -> {
             try {
-                webSocketSession.sendMessage(message);
+                webSocketSession.sendMessage(msg);
             } catch (IOException e) {
                 LOGGER.error("Error occurred.", e);
             }

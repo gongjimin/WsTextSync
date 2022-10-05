@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html style="height: 100%;">
+<head>
+<meta charset="utf-8">
+<title>WsTextSync</title>
+<script>
+var ws;
+
+function connect() {
+    var url = 'ws://'+window.location.hostname+':'+window.location.port+'/web-socket';
+
+    ws = new WebSocket(url);
+    ws.onopen = function () {
+        showMessage('已建立连接');
+    };
+    ws.onmessage = function (evt) {
+    	document.getElementById("textSync").value = evt.data;
+    };
+    ws.onerror = function () {
+    	showMessage('WebSocket发生了错误');
+    };
+    ws.onclose = function () {
+    	showMessage('连接已关闭');
+    };
+    
+}
+
+function disconnect() {
+    if (ws != null) {
+        ws.close();
+        showMessage('已断开连接');
+    }
+}            
+
+function send() {
+    ws.send(document.getElementById("textSync").value);
+}
+
+function showMessage(message) {
+    document.getElementById("msg").innerHTML = message;
+}
+</script>
+</head>
+<body onload="connect()">
+    <div>基于WebSocket在多个浏览器之间同步文本数据</div>
+    <div id="msg"></div>
+    <div><textarea id="textSync" oninput="send()" placeholder="文本框内的内容发生变化时，数据将自动同步到所有打开这个页面的浏览器" style="resize:none;position: absolute;top:60px;bottom:0px;right:0px;left:0px;"></textarea></div>
+</body>
+</html>

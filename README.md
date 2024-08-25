@@ -8,7 +8,7 @@
 
 1. 安装JDK（1.8或更高版本）。
 
-1. 使用```java -jar```运行构建好的服务程序例如：
+1. 使用```java -jar```运行构建好的服务程序。例如：
 
     ```bash
     java -jar demo-0.0.1-SNAPSHOT.jar
@@ -18,6 +18,12 @@
 
     ```bash
     java -jar demo-0.0.1-SNAPSHOT.jar --server.port=80
+    ```
+
+1. 服务器默认支持不超过8KiB的文本消息，这个限制可以通过启动时传入指定的大小参数来修改。例如下面的启动参数可以改为640KiB：
+
+    ```bash
+    java -Dorg.apache.tomcat.websocket.DEFAULT_BUFFER_SIZE=655360 -jar demo-0.0.1-SNAPSHOT.jar
     ```
 
 1. 服务器默认支持不超过8KiB的文本消息，这个限制可以通过启动时传入指定的大小参数来修改。例如下面的启动参数可以改为640KiB：

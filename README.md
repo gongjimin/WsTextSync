@@ -13,8 +13,18 @@
     ```bash
     java -jar demo-0.0.1-SNAPSHOT.jar
     ```
-    
-1. 服务程序默认运行在8080端口，如需更改端口号，可参考SpringBoot配置方法进行修改。
+
+1. 服务程序默认运行在8080端口，如需更改端口号，可参考SpringBoot配置方法进行修改。例如在命令行中加入server.port参数。
+
+    ```bash
+    java -jar demo-0.0.1-SNAPSHOT.jar --server.port=80
+    ```
+
+1. 服务器默认支持不超过8KiB的文本消息，这个限制可以通过启动时传入指定的大小参数来修改。例如下面的启动参数可以改为640KiB：
+
+    ```bash
+    java -Dorg.apache.tomcat.websocket.DEFAULT_BUFFER_SIZE=655360 -jar demo-0.0.1-SNAPSHOT.jar
+    ```
 
 ## 客户端使用方法
 

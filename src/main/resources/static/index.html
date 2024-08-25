@@ -1,49 +1,80 @@
 <!DOCTYPE HTML>
-<html style="height: 100%;">
+<html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>WsTextSync</title>
-<script>
-var ws;
-
-function connect() {
-    var url = 'ws://'+window.location.hostname+':'+window.location.port+'/web-socket';
-
-    ws = new WebSocket(url);
-    ws.onopen = function () {
-        showMessage('已建立连接');
-    };
-    ws.onmessage = function (evt) {
-    	document.getElementById("textSync").value = evt.data;
-    };
-    ws.onerror = function () {
-    	showMessage('WebSocket发生了错误');
-    };
-    ws.onclose = function () {
-    	showMessage('连接已关闭');
-    };
-    
-}
-
-function disconnect() {
-    if (ws != null) {
-        ws.close();
-        showMessage('已断开连接');
-    }
-}            
-
-function send() {
-    ws.send(document.getElementById("textSync").value);
-}
-
-function showMessage(message) {
-    document.getElementById("msg").innerHTML = message;
-}
-</script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>WsTextSync</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            padding: 10px;
+            background-color: #f8f8f8;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+        textarea {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            resize: none;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+	<script>
+	var ws;
+	
+	function connect() {
+	    var url = 'ws://'+window.location.hostname+':'+window.location.port+'/web-socket';
+	
+	    ws = new WebSocket(url);
+	    ws.onopen = function () {
+	        showMessage('已建立连接');
+	    };
+	    ws.onmessage = function (evt) {
+	    	document.getElementById("textSync").value = evt.data;
+	    };
+	    ws.onerror = function () {
+	    	showMessage('WebSocket发生了错误');
+	    };
+	    ws.onclose = function () {
+	    	showMessage('连接已关闭');
+	    };
+	    
+	}
+	
+	function disconnect() {
+	    if (ws != null) {
+	        ws.close();
+	        showMessage('已断开连接');
+	    }
+	}            
+	
+	function send() {
+	    ws.send(document.getElementById("textSync").value);
+	}
+	
+	function showMessage(message) {
+	    document.getElementById("msg").innerHTML = message;
+	}
+	</script>
 </head>
 <body onload="connect()">
     <div>基于WebSocket在多个浏览器之间同步文本数据</div>
     <div id="msg"></div>
-    <div><textarea id="textSync" oninput="send()" placeholder="文本框内的内容发生变化时，数据将自动同步到所有打开这个页面的浏览器" style="resize:none;position: absolute;top:60px;bottom:0px;right:0px;left:0px;"></textarea></div>
+    <div class="container"><textarea id="textSync" oninput="send()" placeholder="文本框内的内容发生变化时，数据将自动同步到所有打开这个页面的浏览器"></textarea></div>
 </body>
 </html>
